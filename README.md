@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # class_management
 
 A new Flutter project.
@@ -14,3 +15,8 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+=======
+# college_project
+this is the beging of the college project. this is done for the studying and research purpose
+>>>>>>> dee6e46566265a36f9234ca35f1fe06c03870c9b
+# test
