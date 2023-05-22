@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "86398548424",
+    "project_id": "kashya-be77e",
+    "storage_bucket": "kashya-be77e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:86398548424:android:7d29824dfe06a13015e8fd",
+        "android_client_info": {
+          "package_name": "com.example.class_management"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "86398548424-5j48loun5bdo5t325ikcojk159bkl01o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBrxHjS1sqjiw4xLLLnYvbyT1bvtDozDXs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "86398548424-5j48loun5bdo5t325ikcojk159bkl01o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
