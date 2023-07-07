@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -40,7 +41,7 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void _login() async {
+  void _submitForm() async {
     if (_formKey.currentState!.validate()) {
       String email = _emailController.text;
       String password = _passwordController.text;
@@ -51,16 +52,18 @@ class _LoginPageState extends State<LoginPage> {
           password: password,
         );
 
-        // Additional logic after successful login
-        // For example, navigate to a home screen or display a success message
+        // Navigate to HomeScreen if login is successful
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
       } catch (e) {
-        // Handle login errors
         showDialog(
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text('Error'),
-              content: Text(e.toString()),
+              content: Text('Invalid email or password'),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -80,6 +83,13 @@ class _LoginPageState extends State<LoginPage> {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => SignUpPage()),
+    );
+  }
+
+  void _navigateToForgotPassword() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => ForgotPasswordPage()),
     );
   }
 
@@ -119,13 +129,17 @@ class _LoginPageState extends State<LoginPage> {
               ),
               SizedBox(height: 16.0),
               ElevatedButton(
-                onPressed: _login,
+                onPressed: _submitForm,
                 child: Text('Login'),
               ),
               SizedBox(height: 8.0),
               TextButton(
                 onPressed: _navigateToSignUp,
                 child: Text('Create a new account'),
+              ),
+              TextButton(
+                onPressed: _navigateToForgotPassword,
+                child: Text('Forgot Password?'),
               ),
             ],
           ),
@@ -175,8 +189,7 @@ class _SignUpFormState extends State<SignUpForm> {
       String password = _passwordController.text;
 
       try {
-        UserCredential userCredential =
-            await _auth.createUserWithEmailAndPassword(
+        await _auth.createUserWithEmailAndPassword(
           email: email,
           password: password,
         );
@@ -268,6 +281,84 @@ class _SignUpFormState extends State<SignUpForm> {
             ElevatedButton(
               onPressed: _submitForm,
               child: Text('Sign Up'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ForgotPasswordPage extends StatelessWidget {
+  final _emailController = TextEditingController();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  void _resetPassword(BuildContext context) async {
+    String email = _emailController.text;
+    try {
+      await _auth.sendPasswordResetEmail(email: email);
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Success'),
+            content: Text('Password reset email sent to $email'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    } catch (e) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Error'),
+            content: Text(e.toString()),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Forgot Password'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Enter your email address to reset your password:',
+              style: TextStyle(fontSize: 16.0),
+            ),
+            SizedBox(height: 8.0),
+            TextFormField(
+              controller: _emailController,
+              decoration: InputDecoration(labelText: 'Email'),
+            ),
+            SizedBox(height: 16.0),
+            ElevatedButton(
+              onPressed: () => _resetPassword(context),
+              child: Text('Reset Password'),
             ),
           ],
         ),
