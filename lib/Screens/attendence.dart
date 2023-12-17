@@ -4,39 +4,24 @@ import 'package:pdf/widgets.dart' as pdfLib;
 import 'package:path_provider/path_provider.dart';
 import 'package:open_file/open_file.dart';
 
-void main() {
-  runApp(MyApp());
-}
+import 'student_list.dart';
+import 'utilis/pdf/pdf_dd.dart';
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Attendance App',
-      home: AttendanceScreen(),
-    );
-  }
-}
 
 class Student {
   final String name;
-
-  Student(this.name);
+  bool isPrsent;
+  Student(this.name, {this.isPrsent = false});
 }
 
 class AttendanceScreen extends StatefulWidget {
+  const AttendanceScreen({Key? key}) : super(key: key);
+
   @override
   _AttendanceScreenState createState() => _AttendanceScreenState();
 }
 
 class _AttendanceScreenState extends State<AttendanceScreen> {
-  List<Student> students = [
-    Student('Alice'),
-    Student('Bob'),
-    Student('Charlie'),
-    Student('David'),
-  ];
-
   DateTime _selectedDate = DateTime(2023, 7, 1);
   Map<Student, bool> studentAttendance = {};
 
@@ -52,7 +37,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Attendance'),
+        title: const Text('Attendance'),
       ),
       body: Column(
         children: [
@@ -60,7 +45,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             padding: const EdgeInsets.all(16.0),
             child: Text(
               'Selected Date: ${_selectedDate.day}/${_selectedDate.month}/${_selectedDate.year}',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -70,13 +55,28 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
             onPressed: () {
               _selectDate(context);
             },
-            child: Text('Change Date'),
+            child: const Text('Change Date'),
           ),
           ElevatedButton(
             onPressed: () {
+              Navigator.of(context).push(MaterialPageRoute<void>(
+                builder: (BuildContext context) => PdfPreviewPage(
+                    title: const ["Name", "Attendance"],
+                    ledgerData: students
+                        .map((e) => [e.name, e.isPrsent ? "Present" : "Absent"])
+                        .toList()
+                    //  [
+                    //   ["Anish", "Present"],
+                    //   ["Anish", "Present"],
+                    //   ["Anish", "Present"],
+                    //   ["Anish", "Present"],
+                    //   ["Anish", "Present"],
+                    // ],
+                    ),
+              ));
               _downloadPdf();
             },
-            child: Text('Download PDF'),
+            child: const Text('Download PDF'),
           ),
           _buildAttendanceTable(),
         ],
@@ -86,7 +86,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
   Widget _buildAttendanceTable() {
     return DataTable(
-      columns: [
+      columns: const [
         DataColumn(label: Text('Student Name')),
         DataColumn(label: Text('Present')),
       ],
@@ -96,7 +96,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
 
   List<DataRow> _buildAttendanceRows() {
     List<DataRow> rows = [];
-    students.forEach((student) {
+    for (var student in students) {
       rows.add(DataRow(
         cells: [
           DataCell(Text(student.name)),
@@ -106,7 +106,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
               onChanged: (bool? value) {
                 if (value != null) {
                   setState(() {
-                    studentAttendance[student] = value;
+                    student.isPrsent = value;
                   });
                 }
               },
@@ -114,7 +114,7 @@ class _AttendanceScreenState extends State<AttendanceScreen> {
           ),
         ],
       ));
-    });
+    }
     return rows;
   }
 

@@ -1,20 +1,9 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Assignment App',
-      home: AssignmentScreen(),
-    );
-  }
-}
 
 class AssignmentScreen extends StatefulWidget {
+  const AssignmentScreen({Key? key}) : super(key: key);
+
   @override
   _AssignmentScreenState createState() => _AssignmentScreenState();
 }
@@ -47,7 +36,7 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
           final assignment = assignments[index];
 
           return Card(
-            margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+            margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
             elevation: 2,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
@@ -56,14 +45,14 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
             child: ListTile(
               title: Text(
                 assignment['title'],
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),
               ),
               subtitle: Text(
                 'Deadline: ${assignment['deadline']}',
-                style: TextStyle(
+                style: const TextStyle(
                   fontStyle: FontStyle.italic,
                 ),
               ),
@@ -75,7 +64,7 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
         onPressed: () {
           _addAssignment();
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }
@@ -88,7 +77,7 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
         String newDeadline = '';
 
         return AlertDialog(
-          title: Text('Add Assignment'),
+          title: const Text('Add Assignment'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -96,25 +85,25 @@ class _AssignmentScreenState extends State<AssignmentScreen> {
                 onChanged: (value) {
                   newTitle = value;
                 },
-                decoration: InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(labelText: 'Title'),
               ),
               TextField(
                 onChanged: (value) {
                   newDeadline = value;
                 },
-                decoration: InputDecoration(labelText: 'Deadline'),
+                decoration: const InputDecoration(labelText: 'Deadline'),
               ),
             ],
           ),
           actions: <Widget>[
             TextButton(
-              child: Text('Cancel'),
+              child: const Text('Cancel'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text('Add'),
+              child: const Text('Add'),
               onPressed: () {
                 if (newTitle.isNotEmpty && newDeadline.isNotEmpty) {
                   setState(() {

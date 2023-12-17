@@ -5,143 +5,29 @@ import 'chat.dart';
 import 'attendence.dart';
 import 'assignment.dart';
 
-Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(MaterialApp(
-    home: LoginScreen(),
-  ));
-}
 
-class LoginScreen extends StatefulWidget {
-  @override
-  _LoginScreenState createState() => _LoginScreenState();
-}
 
-class _LoginScreenState extends State<LoginScreen> {
-  final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
-
-  FirebaseAuth _auth = FirebaseAuth.instance;
-
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
-
-  void _submitForm() async {
-    if (_formKey.currentState!.validate()) {
-      String email = _emailController.text;
-      String password = _passwordController.text;
-
-      try {
-        UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-          email: email,
-          password: password,
-        );
-
-        // Navigate to HomeScreen if login is successful
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
-      } catch (e) {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Error'),
-              content: Text('Invalid email or password'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
-      }
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              TextFormField(
-                controller: _emailController,
-                decoration: InputDecoration(labelText: 'Email'),
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter an email address';
-                  }
-                  return null;
-                },
-              ),
-              TextFormField(
-                controller: _passwordController,
-                decoration: InputDecoration(labelText: 'Password'),
-                obscureText: true,
-                validator: (value) {
-                  if (value!.isEmpty) {
-                    return 'Please enter a password';
-                  }
-                  return null;
-                },
-              ),
-              SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: _submitForm,
-                child: Text('Login'),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-// class AttendanceScreen extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     // Implement the UI for the attendance screen
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Attendance'),
-//       ),
-//       body: Center(
-//         child: Text('Attendance Screen'),
-//       ),
-//     );
-//   }
-// }
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen();
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Homepage'),
+        title: const Text('Homepage'),
+        actions: [
+          TextButton.icon(
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+                // Navigate to the login screen or any other screen after logging out
+                Navigator.of(context).pushReplacementNamed('/LoginScreen');
+              },
+              icon: const Icon(Icons.logout),
+              label: const Text('log Out'))
+        ],
       ),
-      body: Container(
+      body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -151,14 +37,14 @@ class HomeScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    HeaderSection(),
-                    SizedBox(height: 20),
+                    const HeaderSection(),
+                    const SizedBox(height: 20),
                     BodySection(),
                   ],
                 ),
               ),
             ),
-            FooterSection(),
+            const FooterSection(),
           ],
         ),
       ),
@@ -167,11 +53,13 @@ class HomeScreen extends StatelessWidget {
 }
 
 class HeaderSection extends StatelessWidget {
+  const HeaderSection({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16),
-      child: Row(
+      padding: const EdgeInsets.all(16),
+      child: const Row(
         children: [
           CircleAvatar(
             radius: 30,
@@ -211,25 +99,27 @@ class BodySection extends StatelessWidget {
     'Event 3',
   ];
 
+  BodySection({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
+          const Text(
             'Routine',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Table(
               border: TableBorder.all(),
-              defaultColumnWidth: IntrinsicColumnWidth(),
+              defaultColumnWidth: const IntrinsicColumnWidth(),
               children: [
-                TableRow(
+                const TableRow(
                   children: [
                     TableCell(
                       child: Center(
@@ -255,7 +145,7 @@ class BodySection extends StatelessWidget {
                       TableCell(
                         child: Center(
                           child: Padding(
-                            padding: EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(8.0),
                             child: Text(row[0]),
                           ),
                         ),
@@ -263,7 +153,7 @@ class BodySection extends StatelessWidget {
                       TableCell(
                         child: Center(
                           child: Padding(
-                            padding: EdgeInsets.all(8.0),
+                            padding: const EdgeInsets.all(8.0),
                             child: Text(row[1]),
                           ),
                         ),
@@ -273,12 +163,12 @@ class BodySection extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 20),
-          Text(
+          const SizedBox(height: 20),
+          const Text(
             'Events',
             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Container(
             decoration: BoxDecoration(
               border: Border.all(),
@@ -301,11 +191,11 @@ class BodySection extends StatelessWidget {
                   child: ListTile(
                     title: Text(
                       event,
-                      style: TextStyle(fontSize: 18),
+                      style: const TextStyle(fontSize: 18),
                     ),
                     subtitle: Text(
                       'Event details for $event',
-                      style: TextStyle(fontSize: 16),
+                      style: const TextStyle(fontSize: 16),
                     ),
                   ),
                 );
@@ -319,10 +209,12 @@ class BodySection extends StatelessWidget {
 }
 
 class FooterSection extends StatelessWidget {
+  const FooterSection({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16),
       color: Colors.grey[200],
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -331,68 +223,72 @@ class FooterSection extends StatelessWidget {
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => HomeScreen()),
+                MaterialPageRoute(builder: (context) => const HomeScreen()),
               );
             },
             child: InkWell(
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                  MaterialPageRoute(builder: (context) => const HomeScreen()),
                 );
               },
-              child: Icon(Icons.home),
+              child: const Icon(Icons.home),
             ),
           ),
           GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => GroupChatApp()),
+                MaterialPageRoute(builder: (context) => const GroupChatApp()),
               );
             },
             child: InkWell(
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => GroupChatApp()),
+                  MaterialPageRoute(builder: (context) => const GroupChatApp()),
                 );
               },
-              child: Icon(Icons.message),
+              child: const Icon(Icons.message),
             ),
           ),
           GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => AssignmentScreen()),
+                MaterialPageRoute(
+                    builder: (context) => const AssignmentScreen()),
               );
             },
             child: InkWell(
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AssignmentScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const AssignmentScreen()),
                 );
               },
-              child: Icon(Icons.assignment),
+              child: const Icon(Icons.assignment),
             ),
           ),
           GestureDetector(
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => AttendanceScreen()),
+                MaterialPageRoute(
+                    builder: (context) => const AttendanceScreen()),
               );
             },
             child: InkWell(
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AttendanceScreen()),
+                  MaterialPageRoute(
+                      builder: (context) => const AttendanceScreen()),
                 );
               },
-              child: Icon(Icons.check),
+              child: const Icon(Icons.check),
             ),
           ),
         ],

@@ -1,15 +1,13 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  runApp(GroupChatApp());
-}
-
 class GroupChatApp extends StatelessWidget {
+  const GroupChatApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -17,13 +15,15 @@ class GroupChatApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: MessageScreen(),
+      home: const MessageScreen(),
     );
   }
 }
 
 class MessageScreen extends StatefulWidget {
-  @override
+  const MessageScreen({Key? key}) : super(key: key);
+
+  @override  // ignore: library_private_types_in_public_api
   _MessageScreenState createState() => _MessageScreenState();
 }
 
@@ -53,7 +53,7 @@ class _MessageScreenState extends State<MessageScreen> {
         _user = user;
       });
     } catch (e) {
-      print('Failed to sign in: $e');
+      log('Failed to sign in: $e');
     }
   }
 
@@ -64,7 +64,7 @@ class _MessageScreenState extends State<MessageScreen> {
         _user = null;
       });
     } catch (e) {
-      print('Failed to sign out: $e');
+      log('Failed to sign out: $e');
     }
   }
 
@@ -79,7 +79,7 @@ class _MessageScreenState extends State<MessageScreen> {
       });
       _messageController.clear();
     } catch (e) {
-      print('Failed to send message: $e');
+      log('Failed to send message: $e');
     }
   }
 
@@ -87,14 +87,14 @@ class _MessageScreenState extends State<MessageScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Group Chat'),
+        title: const Text('Group Chat'),
         actions: [
           IconButton(
-            icon: Icon(Icons.login),
+            icon: const Icon(Icons.login),
             onPressed: _signIn,
           ),
           IconButton(
-            icon: Icon(Icons.logout),
+            icon: const Icon(Icons.logout),
             onPressed: _signOut,
           ),
         ],
@@ -106,7 +106,7 @@ class _MessageScreenState extends State<MessageScreen> {
               stream: _messagesStream,
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
-                  return Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator());
                 }
 
                 final messages = snapshot.data!.docs;
@@ -130,7 +130,7 @@ class _MessageScreenState extends State<MessageScreen> {
                         ),
                       ),
                       subtitle: Text(isCurrentUser ? 'You' : sender),
-                      trailing: isCurrentUser ? null : Icon(Icons.person),
+                      trailing: isCurrentUser ? null : const Icon(Icons.person),
                     );
                   },
                 );
@@ -144,11 +144,12 @@ class _MessageScreenState extends State<MessageScreen> {
                 Expanded(
                   child: TextField(
                     controller: _messageController,
-                    decoration: InputDecoration(hintText: 'Type a message...'),
+                    decoration:
+                        const InputDecoration(hintText: 'Type a message...'),
                   ),
                 ),
                 IconButton(
-                  icon: Icon(Icons.send),
+                  icon: const Icon(Icons.send),
                   onPressed: () => _sendMessage(_messageController.text),
                 ),
               ],
