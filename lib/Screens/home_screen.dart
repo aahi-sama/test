@@ -1,5 +1,3 @@
-// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
-
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -177,11 +175,11 @@ class HeaderSection extends StatelessWidget {
         children: [
           CircleAvatar(
             radius: 30,
-            backgroundImage: AssetImage('assets/images/profile.jpg'),
+            backgroundImage: AssetImage(''),
           ),
           SizedBox(width: 16),
           Text(
-            'Dummy User',
+            'Admin',
             style: TextStyle(fontSize: 20),
           ),
         ],

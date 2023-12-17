@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'home_screen.dart';
+import 'adminlogin.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -51,7 +52,7 @@ class _LoginPageState extends State<LoginPage> {
           email: email,
           password: password,
         );
-
+        print(userCredential.additionalUserInfo.toString());
         // Navigate to HomeScreen if login is successful
         Navigator.pushReplacement(
           context,
@@ -63,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
           builder: (BuildContext context) {
             return AlertDialog(
               title: Text('Error'),
-              content: Text('Invalid email or password'),
+              content: Text(e.toString()),
               actions: [
                 TextButton(
                   onPressed: () {
@@ -361,6 +362,32 @@ class ForgotPasswordPage extends StatelessWidget {
               child: Text('Reset Password'),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class AdminButton extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Button Demo'),
+      ),
+      body: Align(
+        alignment: Alignment.bottomCenter,
+        child: Padding(
+          padding: EdgeInsets.only(bottom: 16.0),
+          child: ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AdminLogin()),
+              );
+            },
+            child: Text('Admin'),
+          ),
         ),
       ),
     );

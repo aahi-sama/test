@@ -14,7 +14,12 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class AssignmentScreen extends StatelessWidget {
+class AssignmentScreen extends StatefulWidget {
+  @override
+  _AssignmentScreenState createState() => _AssignmentScreenState();
+}
+
+class _AssignmentScreenState extends State<AssignmentScreen> {
   final List<Map<String, dynamic>> assignments = [
     {
       'title': 'Math Assignment',
@@ -66,6 +71,65 @@ class AssignmentScreen extends StatelessWidget {
           );
         },
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _addAssignment();
+        },
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+
+  void _addAssignment() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        String newTitle = '';
+        String newDeadline = '';
+
+        return AlertDialog(
+          title: Text('Add Assignment'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextField(
+                onChanged: (value) {
+                  newTitle = value;
+                },
+                decoration: InputDecoration(labelText: 'Title'),
+              ),
+              TextField(
+                onChanged: (value) {
+                  newDeadline = value;
+                },
+                decoration: InputDecoration(labelText: 'Deadline'),
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text('Add'),
+              onPressed: () {
+                if (newTitle.isNotEmpty && newDeadline.isNotEmpty) {
+                  setState(() {
+                    assignments.add({
+                      'title': newTitle,
+                      'deadline': newDeadline,
+                    });
+                  });
+                }
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
